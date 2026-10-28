@@ -1,0 +1,2023 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Subject:  {{ $json.subject }}\nBody: {{ $json.text }}\nmailID: {{ $json.id }}\nSender Email Address: {{ $json.from.value[0].address }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=you are an intelligent assistant\n\nyour job is to classify any incoming email in the following categories:\n\n!!Urgent (Handle instantly)\n\n@Action (Handle by end of day)\n\n@Calendar (Add to schedule -> Move to Archive)\n\n@Waiting (Check status weekly)\n\nRead Later (Read Sunday morning)\n\nmyPromos (Delete or skim)\n\nmyArchive (Searchable storage)\n\nfor each email output just the category of the email \n\n## Examples of Urgent Emails:\n\nExample 1:\n\nSubject: ⚠️ Security Alert: Suspicious login attempt on your text\nFrom: Emirates NBD Security Team\nBody: We detected a login attempt from a new device in London. If this wasn't you, click here to freeze your account immediately.\n\nExample 2:\n\nSubject: DAD IN HOSPITAL\nFrom: Mom\nBody: Dad slipped and fell. We are at the ER at City Hospital. Please come now.\n\nExample 3:\n\nSubject: URGENT: Website Down / 504 Gateway Error\nFrom: IT Monitoring System\nBody: The main e-commerce server is not responding. Customers cannot checkout. Immediate action required.\n\n## Examples of Action Emails:\n\nExample 1:\n\nSubject: Action Required: Choose your Project Partner\nFrom: Prof. Al-Hassan\nBody: Please submit the name of your lab partner for the exoskeleton project by 5:00 PM today. Groups not assigned will be randomized.\n\nExample 2:\n\nSubject: Please review: Client Proposal for Tomorrow\nFrom: Sarah (Assistant)\nBody: I've attached the draft proposal for the Jumeirah client. Please review and approve the budget section so I can print it for tomorrow's meeting.\n\nExample 3:\n\nSubject: Can you pick up groceries on way home?\nFrom: Wife\nBody: We are out of milk and eggs. Can you stop by Spinneys? Let me know if you can't so I can order delivery.\n\n\n## Examples of Calendar Emails:\n\nExample 1:\n\nSubject: Schedule: Finals Week Timetable\nFrom: Registrar Office\nBody: Your final exam for Computer Architecture is on Dec 12th at 9:00 AM in Hall B.\n\n\nExample 2:\n\nSubject: Invite: Q4 Strategy Planning\nFrom: CEO\nBody: Let's discuss the roadmap for next year.\nWhen: Tuesday, Nov 30 @ 2pm.\nWhere: Conference Room A.\n\nExample 3:\n\nSubject: Appointment Confirmed: Tax Filing Consultation\nFrom: Tax Advisor\nBody: Your Zoom meeting is confirmed for next Monday at 4 PM. Link included.\n\n\n## Examples of Waiting Emails:\n\nExample 1:\n\nSubject: Update: Your Loan Application is under review\nFrom: Bank Support\nBody: We have received your documents. No further action is needed from you. Current processing time is 3-5 days.\n\nExample 2:\n\nSubject: Receipt: Thesis Draft Submission\nFrom: Turnitin System\nBody: Your paper was successfully uploaded. The plagiarism report is generating and will be available in 24 hours.\n\nExample 3:\n\nSubject: Re: Quote for 500 units\nFrom: Supplier\nBody: Thanks for the inquiry. I am checking stock levels with the warehouse and will get back to you with a quote by Thursday.\n\n\n## Examples of Read Later Emails:\n\nExample 1:\n\nSubject: Market Watch: Why Crypto is volatile this week\nFrom: Investopedia Newsletter\nBody: A deep dive into the new regulations affecting Bitcoin and what it means for your portfolio. (10 min read).\n\nExample 2:\n\nSubject: Trends in Dubai Real Estate 2025\nFrom: Property Monitor\nBody: A comprehensive report on rental yields in Business Bay vs. Marina. Attached is the PDF.\n\nExample 3:\n\nSubject: 5 Recipes for Perfect Campfire Potatoes\nFrom: Cooking Weekly\nBody: We tested 5 different foil-wrapping techniques. Here is the science behind the perfect fluffy potato.\n\n\n\n## Examples of Promo Emails:\n\nExample 1:\n\nSubject: Get 200 AED for referring a friend!\nFrom: Liv. Bank\nBody: Invite your friends to open an account and you both get cash bonuses. T&Cs apply.\n\nExample 2:\n\nSubject: Back to School: 40% off Laptops\nFrom: Sharaf DG\nBody: Exclusive discount for students with valid ID cards. Valid until Sunday.\n\nExample 3:\n\nSubject: Last Chance: Free Shipping on your cart\nFrom: Amazon.ae\nBody: You left items in your cart. Complete checkout now to get free delivery.\n\n## Examples of Archive Emails:\n\nExample 1:\n\nSubject: Your Monthly Bank Statement (Oct 2025)\nFrom: ADCB\nBody: Your e-statement is ready. Please find the password-protected PDF attached.\n\nExample 2:\n\nSubject: Signed Contract: Freelance Agreement\nFrom: DocuSign\nBody: All parties have signed the agreement. Attached is the final PDF for your records.\n\nExample 3:\n\nSubject: E-Ticket: Flight to Mumbai\nFrom: Emirates Airline\nBody: Booking Reference: XJ59LZ. Your payment was successful. See you on board.\n\n##Rules:\nYou should ouput exactly the same subject,body,mailid, and senderEmail address do not hallucinate or change any details\n\n\n\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -1136,
+        1248
+      ],
+      "id": "a6d6efa5-5cb7-4909-ab09-7ef828759bc8",
+      "name": "AI Agent",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1168,
+        1472
+      ],
+      "id": "4df8e715-b1d8-4036-8bf6-838b034b762c",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "googlePalmApi (set your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"category\" : \"Urgent\" ,\n  \"subject\" : \"Security Alert: Suspicious login attempt on your text\",\n  \"body\" : \"We detected a login attempt from a new device in London. If this wasn't you, click here to freeze your account immediately.\",\n  \"mailID\" : \"19ac8939e1165b45\",\n  \"senderEmailAddress\" : \"abcd@gmail.com\"\n}\n \n\t",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -1040,
+        1472
+      ],
+      "id": "68a4678d-8bee-48e6-b0b5-f33d65477bac",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "content": "# 0 ! !URGENT \n# 1 @Action \n# 2 @Catendar \n# 3 @Waiting \n# 4 Read Later \n# 5 Promos \n# 6 Archive",
+        "height": 448,
+        "width": 326
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -688,
+        48
+      ],
+      "id": "ea8ff5c8-d5f5-4c2d-9a21-e391b63321c3",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "69d1b5dc-7bee-48d3-86ad-a8c59c376b5f",
+              "name": "message",
+              "value": "={{ $json.output.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1408,
+        -304
+      ],
+      "id": "38ae6c45-e930-40bf-aee2-966b8374d946",
+      "name": "send message"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "63b78aa9-d6fe-4cd9-be77-45028ed4f837",
+              "name": "category",
+              "value": "={{ $('AI Agent').item.json.output.category }}",
+              "type": "string"
+            },
+            {
+              "id": "61a30d25-1d9c-427c-8190-a67becc71f57",
+              "name": "subject",
+              "value": "={{ $('AI Agent').item.json.output.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "13fe4f62-52fd-42f2-b1f3-ce8082c6b525",
+              "name": "body",
+              "value": "={{ $('AI Agent').item.json.output.body }}",
+              "type": "string"
+            },
+            {
+              "id": "1bcfa462-3f15-42d9-98e8-4803052d9732",
+              "name": "mailID",
+              "value": "={{ $('AI Agent').item.json.output.mailID }}",
+              "type": "string"
+            },
+            {
+              "id": "a39e3a80-5b22-4bf7-a3b4-fe15db43b8bc",
+              "name": "senderEmailAddress",
+              "value": "={{ $('AI Agent').item.json.output.senderEmailAddress }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        832,
+        -304
+      ],
+      "id": "f98a0cf8-ec33-4291-be71-da4977bce800",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=category:  {{ $json.category }}\nsubject: {{ $json.subject }}\nbody:{{ $json.body }}\nsenderEmailAddress: {{ $json.senderEmailAddress }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=you are an intellgent helpful assistant\n\nyou will be given the category of the email,the subject of the email, the body of the email, the message id and the sender's email id \n\nyour job is to craft a simple concide whatsapp message summarizing the email for the important emails. \n\nOutput all Keywords in bold\n\nthe emails categories are only @Action and @URGENT!! \n\ncraft in the message in the following sample format:\n\n*ACTION REQUIRED* \n\nYou are required to confirm your *Boxing Championship Registration Confirmation*.\nPlease Reply to the email with your *Weight Category* and *ID Proof* by *5:00 PM TODAY*.\n\n*Sent to*: YOUR_EMAIL@example.com *Sent from*: random@gmail.com\n\nRules:\n# output only the message that will be sent to whatsapp directly\n# no titles or headings or any phrase apart from the message format\n# the \"Sent to\"  will always be YOUR_EMAIL@example.com\n# do not output anything else\n\nFormatting rules\nStyle,Shortcut,Result\nBold: *text*\nItalic: _text_\nStrikethrough: ~text~\nMonospace: ```text```\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1056,
+        -304
+      ],
+      "id": "ff566cb5-d932-4a7f-bf6c-0acdae7dd4f5",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"message\":\"\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1200,
+        -80
+      ],
+      "id": "19c1fb38-9b57-45cd-ae4c-fbb8f67fd3fd",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        -80
+      ],
+      "id": "59463c68-53d2-47fa-a221-439d3979b1e1",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "googlePalmApi (set your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1392,
+        1056
+      ],
+      "id": "0103cb39-c97c-4d18-b0da-173facad5bc1",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1632,
+        -304
+      ],
+      "id": "d2092c43-b2ae-49b8-93bd-912309c40462",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -960,
+        1680
+      ],
+      "id": "15e742f1-df3c-40b7-b64c-dab16dd153fb",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "googlePalmApi (set your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "317d9acc-d5c9-4942-afa0-10db1f573135",
+              "leftValue": "=",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -1616,
+        1056
+      ],
+      "id": "6a621e61-d2a4-427b-910c-0bbb7ead4783",
+      "name": "Filter",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=emailBody: {{ $json.emailBody }}\nNow: {{ $now }}\nsenderEmailAddress: {{ $json.senderEmailAddress }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are a precision scheduling assistant specialized in extracting calendar events from text. \n\n### YOUR OBJECTIVE\nAnalyze the provided \"emailBody\", \"currentTime\", and \"senderEmail\" to extract event details. You must output a structured JSON object that will be used to create a Google Calendar event.\n\n### CORE LOGIC & CONSTRAINTS\n1. **Title Formatting:** Create the title in this format: \"[Event Name] - [Sender Name/Email]\". \n   - Example: \"Project Sync - Alex Smith\"\n2. **Anchor Date:** Use the provided \"currentTime\" as the absolute reference for all relative dates (e.g., \"tomorrow\", \"next Friday\"). \n3. **Timezone Conversion:** - My Local Timezone is GST (Gulf Standard Time, UTC+4).\n   - If the email specifies a different timezone (e.g., EST, GMT, IST, CET), you MUST convert it to GST (UTC+4).\n   - If no timezone is mentioned in the email, assume the time provided is already in GST.\n4. **No Hallucinations:** If the email does not contain a specific date or a clear relative date, do not guess. Set \"error\" to true.\n5. **End Time Logic:** If an end time is not mentioned, set \"end_time\" to exactly 60 minutes after the \"start_time\".\n6. **Format:** All timestamps must be in ISO 8601 format (YYYY-MM-DDTHH:mm:ss).\n\n### OUTPUT SCHEMA\nYou must return ONLY a JSON object with this structure:\n{\n  \"error\": boolean,\n  \"event_title\": \"string or null\",\n  \"start_time\": \"ISO 8601 string or null\",\n  \"end_time\": \"ISO 8601 string or null\"\n}\n\n### EXAMPLE 1 (Success - Timezone Conversion)\nInput emailBody: \"Project sync at 10 AM EST on Dec 30th.\"\nInput senderEmail: \"Alex Smith <alex@example.com>\"\nInput currentTime: 2025-12-25T19:30:00\nOutput: {\n  \"error\": false,\n  \"event_title\": \"Project Sync - Alex Smith\",\n  \"start_time\": \"2025-12-30T19:00:00\",\n  \"end_time\": \"2025-12-30T20:00:00\"\n}\n\n### EXAMPLE 2 (Success - Relative Date)\nInput emailBody: \"Let's meet tomorrow at 2 PM for lunch.\"\nInput senderEmail: \"John Doe <john@example.com>\"\nInput currentTime: 2025-12-25T19:30:00\nOutput: {\n  \"error\": false,\n  \"event_title\": \"Lunch - John Doe\",\n  \"start_time\": \"2025-12-26T14:00:00\",\n  \"end_time\": \"2025-12-26T15:00:00\"\n}\n\n### EXAMPLE 3 (Failure - Missing Info)\nInput emailBody: \"We should meet sometime next week to talk.\"\nInput senderEmail: \"Alice <alice@test.com>\"\nInput currentTime: 2025-12-25T19:30:00\nOutput: {\n  \"error\": true,\n  \"event_title\": null,\n  \"start_time\": null,\n  \"end_time\": null\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1136,
+        272
+      ],
+      "id": "042c4a93-107b-49c5-a72e-139ab1096c20",
+      "name": "AI Agent2",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1104,
+        496
+      ],
+      "id": "290bf46c-71eb-4b4c-9a27-7c660b92f1b0",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "googlePalmApi (set your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7a440f31-d72a-4509-9356-3ec3821d681e",
+              "name": "emailBody",
+              "value": "={{ $('AI Agent').item.json.output.body }}",
+              "type": "string"
+            },
+            {
+              "id": "aff1a6e4-ccf9-45c7-b95d-ddd3b82d8168",
+              "name": "senderEmailAddress",
+              "value": "={{ $('AI Agent').item.json.output.senderEmailAddress }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        272
+      ],
+      "id": "fc0e294b-80fe-4c42-b387-6b5d0a4b8ad7",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1792,
+        2096
+      ],
+      "id": "bab5e5f9-c61c-44f5-b62e-739bc4669a08",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "YOUR_CALENDAR_ID",
+          "mode": "list",
+          "cachedResultName": "N8n agent "
+        },
+        "start": "={{ $json.output.start_time }}",
+        "end": "={{ $json.output.end_time }}",
+        "useDefaultReminders": false,
+        "additionalFields": {
+          "summary": "={{ $json.output.event_title }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1872,
+        272
+      ],
+      "id": "fcc12ee5-df05-45c3-9345-f835e262e5e5",
+      "name": "Create an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "CREDENTIAL_ID",
+          "name": "googleCalendarOAuth2Api (set your own)"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"error\": false,\n  \"event_title\": \"Lunch\",\n  \"start_time\": \"2025-12-26T14:00:00\",\n  \"end_time\": \"2025-12-26T15:00:00\"\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1232,
+        496
+      ],
+      "id": "f022b3c7-e813-4aac-9997-c098124db377",
+      "name": "Structured Output Parser2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        704
+      ],
+      "id": "8c31db22-d2df-4171-b728-73ae04735299",
+      "name": "Google Gemini Chat Model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "CREDENTIAL_ID",
+          "name": "googlePalmApi (set your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a81f7804-1ac1-435c-8a72-8230bc541e5a",
+              "leftValue": "={{ $json.output.error }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1600,
+        272
+      ],
+      "id": "f794d607-20c7-42f0-8032-7e276577d274",
+      "name": "if no error?"
+    },
+    {
+      "parameters": {
+        "content": "## To Schedule any event for any Calendar, Action or Urgent EMail",
+        "height": 672,
+        "width": 1248,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        784,
+        176
+      ],
+      "id": "e3c11b91-9e06-424b-9cb1-1ff40df80147",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## **To Schedule any event for any Calendar, Action or Urgent EMail**",
+        "height": 448,
+        "width": 1488,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        656,
+        -384
+      ],
+      "id": "6273e477-834a-4267-9ce8-12721feb021e",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1920,
+        1056
+      ],
+      "id": "b2512f47-e2e2-4f47-8852-c02ec9830f88",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gate.whapi.cloud/messages/text",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpBearerAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "to",
+              "value": "=WHATSAPP_NUMBER"
+            },
+            {
+              "name": "body",
+              "value": "={{ $json.message }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1952,
+        -256
+      ],
+      "id": "37d3da6f-5aed-4034-a621-51801bc18fe1",
+      "name": "send whapi whatsapp message",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "CREDENTIAL_ID",
+          "name": "httpBearerAuth (set your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "labels",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -1344,
+        2096
+      ],
+      "id": "386410cc-0bc1-4aa3-a86b-a0abca408b31",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "resource": "label",
+        "operation": "create",
+        "name": "={{ $json.labels }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -896,
+        2096
+      ],
+      "id": "2e342a57-78cf-436b-aa02-bb25912eef39",
+      "name": "Create a label",
+      "webhookId": "4df01ca4-34a6-45ef-a4f8-7240c234d79a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"labels\":[\n    \"!!Urgent\",\n    \"@Action\",\n    \"@Calendar\",\n    \"@Waiting\",\n    \"myArchive\",\n    \"myPromos\",\n    \"Read Later\"\n  ] \n  \n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1568,
+        2096
+      ],
+      "id": "99e5bbf2-8795-42b7-9ceb-a2c21643ed91",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1120,
+        2096
+      ],
+      "id": "edc1eb93-c4a8-427f-b469-0774cc4a7d10",
+      "name": "Loop Over Items2"
+    },
+    {
+      "parameters": {
+        "content": "## run this to create the labels\n",
+        "height": 368,
+        "width": 1280
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1920,
+        1984
+      ],
+      "id": "ff1912cc-50d8-479f-8754-d5f826bb420c",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "=",
+        "labelIds": [
+          "Label_3"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        176,
+        352
+      ],
+      "id": "c8173a8b-600b-4b3c-9c25-39c2be5ca67f",
+      "name": "Action",
+      "webhookId": "a7c4dcf4-f4f1-4575-a36f-936a179863a1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "19c46fffcfd8a655",
+        "labelIds": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        176,
+        160
+      ],
+      "id": "25388fe1-012d-439d-ac44-7ddd6ef4c5bc",
+      "name": "Urgent",
+      "webhookId": "5766ad80-7049-4f97-8166-c76370a78c80",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.output.mailID }}",
+        "labelIds": [
+          "Label_4"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        176,
+        544
+      ],
+      "id": "0dc8e640-e678-4c77-8062-562102b7e046",
+      "name": "Calendar",
+      "webhookId": "844541cc-ea7a-4494-adff-2469a04e22fb",
+      "retryOnFail": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.output.mailID }}",
+        "labelIds": [
+          "Label_5"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        176,
+        736
+      ],
+      "id": "21aa767c-8414-47bd-84dd-b88a2861f0c2",
+      "name": "Waiting",
+      "webhookId": "d201199a-8c9a-4adb-bd4a-c4542b28d889",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.output.mailID }}",
+        "labelIds": [
+          "Label_8"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        176,
+        928
+      ],
+      "id": "9be17ac1-3dfb-4ce6-a51f-0c3d7c908649",
+      "name": "Read Later",
+      "webhookId": "caa4cbf3-7b21-424e-9932-e766cb87e837",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.output.mailID }}",
+        "labelIds": [
+          "Label_7"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        176,
+        1120
+      ],
+      "id": "f175854a-60c4-46a9-ba10-8fd8445db438",
+      "name": "Promos",
+      "webhookId": "c2d73294-2dcd-451b-b8e8-6ae469c79b8e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.output.mailID }}",
+        "labelIds": [
+          "Label_6"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        176,
+        1312
+      ],
+      "id": "5351c528-2f4c-45ea-81bc-4e30b4f5787c",
+      "name": "Archive",
+      "webhookId": "a5fa151a-c762-4650-aa5f-68a6bcf38eaa",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('AI Agent').first().json.output.category }}",
+                    "rightValue": "!!Urgent",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "91ee4ffd-14e9-4861-9229-9e2567ba5b11"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7d104643-e678-4eaa-aef6-5cc998e994a0",
+                    "leftValue": "={{ $('AI Agent').first().json.output.category }}",
+                    "rightValue": "@Action",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "afaf940c-5dcd-426a-970d-18c6f3e1c8eb",
+                    "leftValue": "={{ $('AI Agent').first().json.output.category }}",
+                    "rightValue": "@Calendar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9c48fe50-e479-4529-8df8-38ec69f8e525",
+                    "leftValue": "={{ $('AI Agent').first().json.output.category }}",
+                    "rightValue": "@Waiting",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7943a72d-226d-4c2b-a11d-3967aaa38a4c",
+                    "leftValue": "={{ $('AI Agent').first().json.output.category }}",
+                    "rightValue": "Read Later",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ad4298f5-4f0b-4b3f-ad57-79f218895fda",
+                    "leftValue": "={{ $('AI Agent').first().json.output.category }}",
+                    "rightValue": "myPromos",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "93c04310-c863-44c3-8ea8-5cbb380bbddb",
+                    "leftValue": "={{ $('AI Agent').first().json.output.category }}",
+                    "rightValue": "myArchive",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -848,
+        672
+      ],
+      "id": "b9ed55ff-c45e-457b-8aa4-97b9c3979e89",
+      "name": "Switch2"
+    },
+    {
+      "parameters": {
+        "resource": "label",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -272,
+        160
+      ],
+      "id": "0ef7eb1f-34d8-4609-af15-9f1eb7701798",
+      "name": "Get many labels8",
+      "webhookId": "c678a9e4-f341-40b8-bb79-e2155552fa09",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "label",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -272,
+        352
+      ],
+      "id": "9d3761f5-d995-4b5d-96e1-0020f6f9d04b",
+      "name": "Get many labels9",
+      "webhookId": "c678a9e4-f341-40b8-bb79-e2155552fa09",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "label",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -272,
+        544
+      ],
+      "id": "a3867cc5-b22d-4919-94b5-dbf80f82c3df",
+      "name": "Get many labels10",
+      "webhookId": "c678a9e4-f341-40b8-bb79-e2155552fa09",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "label",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -272,
+        736
+      ],
+      "id": "3c46e2c6-decf-46ea-b2ef-b75bcac6adea",
+      "name": "Get many labels11",
+      "webhookId": "c678a9e4-f341-40b8-bb79-e2155552fa09",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "label",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -272,
+        928
+      ],
+      "id": "f9cf063d-daff-40b0-9289-6e6848c44e04",
+      "name": "Get many labels12",
+      "webhookId": "c678a9e4-f341-40b8-bb79-e2155552fa09",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "label",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -272,
+        1120
+      ],
+      "id": "65270e68-3131-4353-82dc-72c77e1830ed",
+      "name": "Get many labels13",
+      "webhookId": "c678a9e4-f341-40b8-bb79-e2155552fa09",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "label",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -272,
+        1312
+      ],
+      "id": "65195b2f-27fd-4d64-8702-2d876984cecf",
+      "name": "Get many labels14",
+      "webhookId": "c678a9e4-f341-40b8-bb79-e2155552fa09",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID",
+          "name": "gmailOAuth2 (set your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d167fc00-29f0-4b2e-a6ac-01e319271924",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "!!Urgent",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -48,
+        160
+      ],
+      "id": "cc355779-03fd-4829-a607-4bd9730c1a32",
+      "name": "!!Urgent1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d167fc00-29f0-4b2e-a6ac-01e319271924",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "@Action",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -48,
+        352
+      ],
+      "id": "e776c3aa-fc8e-47c2-9b23-ee10de4a0e88",
+      "name": "@Action1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d167fc00-29f0-4b2e-a6ac-01e319271924",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "@Calendar",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -48,
+        544
+      ],
+      "id": "6af95827-da14-4317-811b-2c8de0eda057",
+      "name": "@Calendar1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d167fc00-29f0-4b2e-a6ac-01e319271924",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "@Waiting",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -48,
+        736
+      ],
+      "id": "738fb695-0969-47e7-83d9-05a97d00455d",
+      "name": "@Waiting1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d167fc00-29f0-4b2e-a6ac-01e319271924",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "myArchive",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -48,
+        1312
+      ],
+      "id": "83b4f174-7902-4c32-896d-32c4ae01ae43",
+      "name": "myArchive1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d167fc00-29f0-4b2e-a6ac-01e319271924",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "myPromos",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -48,
+        1120
+      ],
+      "id": "bd4323a8-c58b-4d46-8a2e-e1f90867aba1",
+      "name": "myPromos1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d167fc00-29f0-4b2e-a6ac-01e319271924",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "Read Later",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -48,
+        928
+      ],
+      "id": "40106ffe-5682-4e44-88a9-226d42026330",
+      "name": "Read Later3"
+    },
+    {
+      "parameters": {
+        "content": "## For any error message in the Add label ndoe\n",
+        "height": 320,
+        "width": 960
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2272,
+        2784
+      ],
+      "id": "585186d2-b224-4cc9-a5b6-134325497798",
+      "name": "Sticky Note1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3a9e3e41-bd2e-483f-8a27-779a8c702586",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2224,
+        2864
+      ],
+      "id": "593f8872-9227-4904-967f-a37de2ae1db0",
+      "name": "if error?",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3deaa268-fed4-4d04-af8c-bf7a9046e792",
+              "name": "errorMSg",
+              "value": "={{ $json.error }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1872,
+        2864
+      ],
+      "id": "1d414c33-7f4f-4d71-8232-3c70b13c1eb4",
+      "name": "set error message",
+      "alwaysOutputData": true,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://api.callmebot.com/whatsapp.php",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "phone",
+              "value": "WHATSAPP_NUMBER"
+            },
+            {
+              "name": "apikey",
+              "value": "CALLMEBOT_API_KEY"
+            },
+            {
+              "name": "=text",
+              "value": "=test"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1504,
+        2864
+      ],
+      "id": "51e93f55-9775-4417-b9df-92aabb3fb73d",
+      "name": "send error message on whatsapp",
+      "disabled": true
+    }
+  ],
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send message": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "send whapi whatsapp message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Structured Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "if no error?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Structured Output Parser2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "if no error?": {
+      "main": [
+        [
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send whapi whatsapp message": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a label": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items2": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Create a label",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Action": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Urgent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch2": {
+      "main": [
+        [
+          {
+            "node": "Get many labels8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get many labels9",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get many labels10",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get many labels11",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get many labels12",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get many labels13",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get many labels14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many labels8": {
+      "main": [
+        [
+          {
+            "node": "!!Urgent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many labels9": {
+      "main": [
+        [
+          {
+            "node": "@Action1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many labels10": {
+      "main": [
+        [
+          {
+            "node": "@Calendar1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many labels11": {
+      "main": [
+        [
+          {
+            "node": "@Waiting1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many labels12": {
+      "main": [
+        [
+          {
+            "node": "Read Later3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many labels13": {
+      "main": [
+        [
+          {
+            "node": "myPromos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many labels14": {
+      "main": [
+        [
+          {
+            "node": "myArchive1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "!!Urgent1": {
+      "main": [
+        [
+          {
+            "node": "Urgent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "@Action1": {
+      "main": [
+        [
+          {
+            "node": "Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "@Calendar1": {
+      "main": [
+        [
+          {
+            "node": "Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "@Waiting1": {
+      "main": [
+        [
+          {
+            "node": "Waiting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "myArchive1": {
+      "main": [
+        [
+          {
+            "node": "Archive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "myPromos1": {
+      "main": [
+        [
+          {
+            "node": "Promos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Later3": {
+      "main": [
+        [
+          {
+            "node": "Read Later",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "if error?": {
+      "main": [
+        [
+          {
+            "node": "set error message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set error message": {
+      "main": [
+        [
+          {
+            "node": "send error message on whatsapp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d78a473b963ef6e8831b016d5a9dff0253240b0ad77c6b2a9df186bc5dd45889"
+  }
+}
